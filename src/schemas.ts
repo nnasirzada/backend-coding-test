@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = (db) => {
+import { Database } from "sqlite3";
+
+export default (db: Database) => {
     const createRideTableSchema = `
         CREATE TABLE Rides
         (

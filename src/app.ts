@@ -1,12 +1,11 @@
-'use strict';
+import express from 'express';
+import bodyParser from 'body-parser';
+import { Database } from 'sqlite3';
 
-const express = require('express');
 const app = express();
-
-const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-module.exports = (db) => {
+module.exports = (db: Database) => {
     app.get('/health', (req, res) => res.send('Healthy'));
 
     app.post('/rides', jsonParser, (req, res) => {
@@ -77,7 +76,7 @@ module.exports = (db) => {
     });
 
     app.get('/rides', (req, res) => {
-        db.all('SELECT * FROM Rides', function (err, rows) {
+        db.all('SELECT * FROM Rides', function (err: Error, rows: any[]) {
             if (err) {
                 return res.send({
                     error_code: 'SERVER_ERROR',
