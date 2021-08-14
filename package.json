@@ -9,7 +9,8 @@
   "scripts": {
     "test": "npm run lint && nyc env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'",
     "start": "tsc && node dist/index.js",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "prepare": "husky install"
   },
   "keywords": [
     "Xendit"
