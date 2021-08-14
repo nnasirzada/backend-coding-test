@@ -3,12 +3,12 @@
 import 'mocha';
 import request from 'supertest';
 import { verbose } from 'sqlite3';
+import buildSchemas from '../src/schemas';
 
 const sqlite3 = verbose();
 const db = new sqlite3.Database(':memory:');
 
 const app = require('../src/app')(db);
-const buildSchemas = require('../src/schemas');
 
 describe('API tests', () => {
     before((done) => {
