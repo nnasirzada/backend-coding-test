@@ -9,5 +9,9 @@
     "extends": [
       "eslint:recommended",
       "airbnb-typescript/base"
-    ]
+    ],
+    "rules": {
+      "consistent-return": "off",
+      "func-names": "off"
+    }
   }
