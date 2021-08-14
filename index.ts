@@ -1,8 +1,7 @@
-import express from 'express';
 import { verbose } from 'sqlite3';
 import buildSchemas from './src/schemas';
+import Logger from './src/logger/logger';
 
-const app = express();
 const port = 8010;
 
 const sqlite3 = verbose();
@@ -13,5 +12,5 @@ db.serialize(() => {
 
     const app = require('./src/app')(db);
 
-    app.listen(port, () => console.log(`App started and listening on port ${port}`));
+    app.listen(port, () => Logger.info(`App started and listening on port ${port}`));
 });
