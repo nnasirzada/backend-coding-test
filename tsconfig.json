@@ -17,5 +17,8 @@
   "include": [
       "src/**/*",
       "index.ts"
+  ],
+  "exclude": [
+      "tests/**/*"
   ]
 }

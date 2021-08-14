@@ -1,8 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { Database } from 'sqlite3';
+import morganMiddleware from './logger/middleware/morgan';
 
 const app = express();
+app.use(morganMiddleware);
 const jsonParser = bodyParser.json();
 
 module.exports = (db: Database) => {
