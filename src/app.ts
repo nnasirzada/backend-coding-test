@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import helmet from 'helmet';
 import morganMiddleware from './logger/middleware/morgan';
 import RideController from './controller/ride-controller';
-import helmet from 'helmet';
 
 export default (rideController: RideController) => {
   const app = express();
