@@ -29,8 +29,19 @@ class RideController {
 
   async getAllRides(req: Request, res: Response) {
     try {
-      const rides = await this.rideService.getAllRides();
-      return res.json(rides);
+      let recordLimit = Number(req.query.limit) || 10;
+      const recordSkip = Number(req.query.skip) || 0;
+      if (recordLimit > 10) {
+        recordLimit = 10;
+      }
+      const [rides, ridesCount] = await Promise.all([
+        this.rideService.getAllRides(recordLimit, recordSkip),
+        this.rideService.getRidesCount(),
+      ]);
+      return res.json({
+        totalRecords: ridesCount,
+        data: rides,
+      });
     } catch (error) {
       return handleError(error, res);
     }
@@ -69,7 +80,7 @@ class RideController {
       );
       const createdRideId = await this.rideService.createRide(ride);
       const createdRide = await this.rideService.getRideById(createdRideId);
-      return res.json(createdRide);
+      return res.status(201).json(createdRide);
     } catch (error) {
       return handleError(error, res);
     }
