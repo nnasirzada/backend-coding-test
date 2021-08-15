@@ -4,7 +4,8 @@
     "src/**/*.ts"
   ],
   "exclude": [
-    "index.ts"
+    "index.ts",
+    "src/model/*.ts"
   ],
   "check-coverage": true,
   "branches": 80,
