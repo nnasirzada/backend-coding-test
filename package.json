@@ -8,8 +8,9 @@
   },
   "scripts": {
     "test": "npm run lint && nyc env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'",
+    "test:load": "artillery run --output artillery-report.json artillery.yml",
     "start": "tsc && node dist/index.js",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint . --ext .ts --fix",
     "prepare": "is-ci || husky install"
   },
   "keywords": [
@@ -41,6 +42,7 @@
     "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
     "@typescript-eslint/parser": "^4.29.1",
+    "artillery": "^1.7.6",
     "chai": "^4.3.4",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
