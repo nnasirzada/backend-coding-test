@@ -10,7 +10,7 @@
     "test": "npm run lint && nyc env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'",
     "start": "tsc && node dist/index.js",
     "lint": "eslint . --ext .ts",
-    "prepare": "husky install"
+    "prepare": "is-ci || husky install"
   },
   "keywords": [
     "Xendit"
@@ -45,6 +45,7 @@
     "eslint": "^7.32.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-plugin-import": "^2.24.0",
+    "is-ci": "^3.0.0",
     "mocha": "^6.1.4",
     "nyc": "^15.1.0",
     "supertest": "^4.0.2",

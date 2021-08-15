@@ -247,13 +247,13 @@ describe('API tests', () => {
     });
 
     describe('GET /rides', () => {
-        before((done) => {
+        before(async () => {
             const rideRepository = Container.get(RideRepository);
-            Promise.all(["Bob", "Therry", "Frank", "Mark"].map((name) => rideRepository.createRide(
-                new Ride(undefined, 50, 60, 70, 80, name, "Nazar", "Prius", undefined))
-            ))
-            .then(() => done())
-            .catch((err) => done(err));
+            for (const name of ["Bob", "Therry", "Frank", "Mark"]) {
+                await rideRepository.createRide(
+                    new Ride(undefined, 50, 60, 70, 80, name, "Nazar", "Prius", undefined)
+                );
+            }
         });
 
         it('should respond with all rides', (done: Mocha.Done) => {
