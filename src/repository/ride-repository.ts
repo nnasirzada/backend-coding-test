@@ -8,7 +8,16 @@ class RideRepository {
 
   getAllRides(limit = 10, skip = 0): Promise<Ride[]> {
     return new Promise((res, rej) => {
-      this.db.all('SELECT * FROM Rides ORDER BY rideID DESC LIMIT ? OFFSET ?', [limit, skip], (err: Error, rides: Ride[]) => {
+      this.db.all(`SELECT rideID AS ride_ID,
+                          startLat AS start_lat,
+                          startLong AS start_long,
+                          endLat AS end_lat,
+                          endLong AS end_long,
+                          riderName AS rider_name,
+                          driverName AS driver_name,
+                          driverVehicle AS driver_vehicle,
+                          created
+                    FROM Rides ORDER BY rideID DESC LIMIT ? OFFSET ?`, [limit, skip], (err: Error, rides: Ride[]) => {
         if (err) {
           return rej(err);
         }
@@ -19,7 +28,16 @@ class RideRepository {
 
   getRideById(rideId: number): Promise<Ride> {
     return new Promise((res, rej) => {
-      this.db.get('SELECT * FROM Rides WHERE rideId = ?', rideId, (err: Error, ride: Ride) => {
+      this.db.get(`SELECT rideID AS ride_ID,
+                          startLat AS start_lat,
+                          startLong AS start_long,
+                          endLat AS end_lat,
+                          endLong AS end_long,
+                          riderName AS rider_name,
+                          driverName AS driver_name,
+                          driverVehicle AS driver_vehicle,
+                          created 
+                   FROM Rides WHERE rideId = ?`, rideId, (err: Error, ride: Ride) => {
         if (err) {
           return rej(err);
         }
@@ -31,13 +49,13 @@ class RideRepository {
   createRide(ride: Ride): Promise<number> {
     return new Promise((res, rej) => {
       const values = [
-        ride.startLat,
-        ride.startLong,
-        ride.endLat,
-        ride.endLong,
-        ride.riderName,
-        ride.driverName,
-        ride.driverVehicle,
+        ride.start_lat,
+        ride.start_long,
+        ride.end_lat,
+        ride.end_long,
+        ride.rider_name,
+        ride.driver_name,
+        ride.driver_vehicle,
       ];
       this.db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values, function (err: Error) {
         if (err) {

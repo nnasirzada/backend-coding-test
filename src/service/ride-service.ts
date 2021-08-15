@@ -43,31 +43,31 @@ class RideService {
 
   createRide(ride: Ride): Promise<number> {
     return new Promise((res, rej) => {
-      if (ride.startLat < -90 || ride.startLat > 90) {
+      if (ride.start_lat < -90 || ride.start_lat > 90) {
         return rej(new ApiError(ApiError.VALIDATION_ERROR, 'Start latitude must be between -90 - 90 degrees'));
       }
 
-      if (ride.startLong < -180 || ride.startLong > 180) {
+      if (ride.start_long < -180 || ride.start_long > 180) {
         return rej(new ApiError(ApiError.VALIDATION_ERROR, 'Start longitude must be between -180 to 180 degrees'));
       }
 
-      if (ride.endLat < -90 || ride.endLat > 90) {
+      if (ride.end_lat < -90 || ride.end_lat > 90) {
         return rej(new ApiError(ApiError.VALIDATION_ERROR, 'End latitude must be between -90 - 90 degrees'));
       }
 
-      if (ride.endLong < -180 || ride.endLong > 180) {
+      if (ride.end_long < -180 || ride.end_long > 180) {
         return rej(new ApiError(ApiError.VALIDATION_ERROR, 'End longitude must be between -180 to 180 degrees'));
       }
 
-      if (typeof ride.riderName !== 'string' || !ride.riderName || ride.riderName?.length < 1) {
+      if (typeof ride.rider_name !== 'string' || !ride.rider_name || ride.rider_name?.length < 1) {
         return rej(new ApiError(ApiError.VALIDATION_ERROR, 'Rider name must be a non empty string'));
       }
 
-      if (typeof ride.driverName !== 'string' || !ride.driverName || ride.driverName.length < 1) {
+      if (typeof ride.driver_name !== 'string' || !ride.driver_name || ride.driver_name.length < 1) {
         return rej(new ApiError(ApiError.VALIDATION_ERROR, 'Driver name must be a non empty string'));
       }
 
-      if (typeof ride.driverVehicle !== 'string' || !ride.driverVehicle || ride.driverVehicle.length < 1) {
+      if (typeof ride.driver_vehicle !== 'string' || !ride.driver_vehicle || ride.driver_vehicle.length < 1) {
         return rej(new ApiError(ApiError.VALIDATION_ERROR, 'Driver vehicle must be a non empty string'));
       }
 
