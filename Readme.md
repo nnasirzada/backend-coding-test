@@ -1,5 +1,9 @@
 [![Build Status](https://travis-ci.com/nnasirzada/backend-coding-test.svg?token=DRxLBUPVCMBYeY45DXM2&branch=master)](https://travis-ci.com/nnasirzada/backend-coding-test)
 
+## API Documentation
+
+The project uses `Swagger` for documentation. Follow the link to go to the documentation page: [http://localhost:8010/api-docs/swagger/](http://localhost:8010/api-docs/swagger/)
+
 # Xendit Coding Exercise
 
 The goal of these exercises are to assess your proficiency in software engineering that is related to the daily work that we do at Xendit. Please follow the instructions below to complete the assessment.
