@@ -8,6 +8,8 @@ import buildSchemas from '../src/schemas';
 import App from '../src/app';
 import Container from 'typedi';
 import RideController from '../src/controller/ride-controller';
+import RideRepository from '../src/repository/ride-repository';
+import Ride from '../src/model/ride';
 
 const sqlite3 = verbose();
 let app: Express;
@@ -225,7 +227,7 @@ describe('API tests', () => {
                 })
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
-                .expect(200)
+                .expect(201)
                 .then(response => {
                     expect(response.body).to.be.an('object');
                     const {rideID, startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle, created} = response.body;
@@ -245,22 +247,57 @@ describe('API tests', () => {
     });
 
     describe('GET /rides', () => {
+        before(async () => {
+            const rideRepository = Container.get(RideRepository);
+            for (const name of ["Bob", "Therry", "Frank", "Mark"]) {
+                await rideRepository.createRide(
+                    new Ride(undefined, 50, 60, 70, 80, name, "Nazar", "Prius", undefined)
+                );
+            }
+        });
+
         it('should respond with all rides', (done: Mocha.Done) => {
             request(app)
                 .get('/rides')
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .then(response => {
-                    expect(response.body).to.be.an('array').with.length(1);
-                    const {rideID, startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle, created} = response.body[0];
-                    expect(rideID).equal(1);
-                    expect(startLat).equal(20);
-                    expect(startLong).equal(30);
-                    expect(endLat).equal(40);
-                    expect(endLong).equal(50);
-                    expect(riderName).equal("Nazar");
-                    expect(driverName).equal("John");
-                    expect(driverVehicle).equal("Prius 2016 Blue");
+                    expect(response.body).to.be.an('object');
+                    expect(response.body.totalRecords).equal(5);
+                    expect(response.body.data).to.have.lengthOf(5);
+                    const {rideID, startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle, created} = response.body.data[0];
+                    expect(rideID).equal(5);
+                    expect(startLat).equal(50);
+                    expect(startLong).equal(60);
+                    expect(endLat).equal(70);
+                    expect(endLong).equal(80);
+                    expect(riderName).equal("Mark");
+                    expect(driverName).equal("Nazar");
+                    expect(driverVehicle).equal("Prius");
+                    expect(created).to.not.null;
+                    done();
+                })
+                .catch(err => done(err));
+        });
+
+        it('should skip first two rides and respond with next two three rides', (done: Mocha.Done) => {
+            request(app)
+                .get('/rides?limit=3&skip=2')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .then(response => {
+                    expect(response.body).to.be.an('object');
+                    expect(response.body.totalRecords).equal(5);
+                    expect(response.body.data).to.have.lengthOf(3);
+                    const {rideID, startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle, created} = response.body.data[0];
+                    expect(rideID).equal(3);
+                    expect(startLat).equal(50);
+                    expect(startLong).equal(60);
+                    expect(endLat).equal(70);
+                    expect(endLong).equal(80);
+                    expect(riderName).equal("Therry");
+                    expect(driverName).equal("Nazar");
+                    expect(driverVehicle).equal("Prius");
                     expect(created).to.not.null;
                     done();
                 })

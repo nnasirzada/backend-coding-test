@@ -13,10 +13,10 @@ function handleError(error: Error | ApiError, reject: any) {
 class RideService {
   constructor(private readonly rideRepository: RideRepository) {}
 
-  getAllRides(): Promise<Ride[]> {
+  getAllRides(limit = 10, skip = 0): Promise<Ride[]> {
     return new Promise((res, rej) => {
       this.rideRepository
-        .getAllRides()
+        .getAllRides(limit, skip)
         .then((rides) => {
           if (!rides || rides.length === 0) {
             return rej(new ApiError(ApiError.RIDES_NOT_FOUND_ERROR, 'Could not find any rides'));
@@ -75,6 +75,15 @@ class RideService {
         .createRide(ride)
         .then((rideId) => res(rideId))
         .catch((error) => handleError(error, rej));
+    });
+  }
+
+  getRidesCount(): Promise<number> {
+    return new Promise((res, rej) => {
+      this.rideRepository
+        .getRidesCount()
+        .then((ridesCount) => res(ridesCount))
+        .catch((error) => rej(error));
     });
   }
 }
