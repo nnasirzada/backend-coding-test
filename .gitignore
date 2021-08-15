@@ -62,3 +62,6 @@ typings/
 
 # compiled js files from Typescript
 dist
+
+# artillery report output file
+artillery-report.json

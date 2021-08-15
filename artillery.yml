@@ -1,0 +1,52 @@
+config:
+  target: "http://localhost:8010"
+  ensure:
+    p99: 50
+  phases:
+    - duration: 30
+      arrivalRate: 150
+      name: "API Tests"
+  variables:
+    rideID:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+
+scenarios:
+  - name: "Check Health"
+    flow:
+      - get:
+          url: "/health"
+          expect:
+            - statusCode: 200
+
+  - name: "Create a ride"
+    flow:
+      - post:
+          url: "/rides"
+          json:
+            start_lat: 20
+            start_long: 30
+            end_lat: 40
+            end_long: 50
+            rider_name: "Nazar"
+            driver_name: "John"
+            driver_vehicle: "Prius 2016 Blue"
+          expect:
+            - statusCode: 201
+
+  - name: "Get a single ride"
+    flow:
+      - get:
+          url: "/rides/{{ rideID }}"
+          expect:
+            - statusCode: 200
+
+  - name: "Get all rides"
+    flow:
+      - get:
+          url: "/rides"
+          expect:
+            - statusCode: 200
