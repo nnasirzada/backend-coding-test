@@ -1,6 +1,6 @@
 import 'mocha';
 import 'reflect-metadata';
-import { Express } from 'express';
+import { Application, Express } from 'express';
 import { expect } from 'chai';
 import request from 'supertest';
 import { Database, verbose } from 'sqlite3';
@@ -10,9 +10,10 @@ import Container from 'typedi';
 import RideController from '../src/controller/ride-controller';
 import RideRepository from '../src/repository/ride-repository';
 import Ride from '../src/model/ride';
+import HealthController from '../src/controller/health-controller';
 
 const sqlite3 = verbose();
-let app: Express;
+let app: Application;
 
 describe('API tests', () => {
     before((done) => {
@@ -21,7 +22,8 @@ describe('API tests', () => {
             buildSchemas(db);
             Container.set(Database, db);
             const rideController = Container.get(RideController);
-            app = App(rideController);
+            const healthController = Container.get(HealthController);
+            app = App(healthController, rideController);
             done();
         });
     });
@@ -230,15 +232,15 @@ describe('API tests', () => {
                 .expect(201)
                 .then(response => {
                     expect(response.body).to.be.an('object');
-                    const {rideID, startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle, created} = response.body;
-                    expect(rideID).equal(1);
-                    expect(startLat).equal(20);
-                    expect(startLong).equal(30);
-                    expect(endLat).equal(40);
-                    expect(endLong).equal(50);
-                    expect(riderName).equal("Nazar");
-                    expect(driverName).equal("John");
-                    expect(driverVehicle).equal("Prius 2016 Blue");
+                    const {ride_ID, start_lat, start_long, end_lat, end_long, rider_name, driver_name, driver_vehicle, created} = response.body;
+                    expect(ride_ID).equal(1);
+                    expect(start_lat).equal(20);
+                    expect(start_long).equal(30);
+                    expect(end_lat).equal(40);
+                    expect(end_long).equal(50);
+                    expect(rider_name).equal("Nazar");
+                    expect(driver_name).equal("John");
+                    expect(driver_vehicle).equal("Prius 2016 Blue");
                     expect(created).to.not.null;
                     done();
                 })
@@ -265,15 +267,15 @@ describe('API tests', () => {
                     expect(response.body).to.be.an('object');
                     expect(response.body.totalRecords).equal(5);
                     expect(response.body.data).to.have.lengthOf(5);
-                    const {rideID, startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle, created} = response.body.data[0];
-                    expect(rideID).equal(5);
-                    expect(startLat).equal(50);
-                    expect(startLong).equal(60);
-                    expect(endLat).equal(70);
-                    expect(endLong).equal(80);
-                    expect(riderName).equal("Mark");
-                    expect(driverName).equal("Nazar");
-                    expect(driverVehicle).equal("Prius");
+                    const {ride_ID, start_lat, start_long, end_lat, end_long, rider_name, driver_name, driver_vehicle, created} = response.body.data[0];
+                    expect(ride_ID).equal(5);
+                    expect(start_lat).equal(50);
+                    expect(start_long).equal(60);
+                    expect(end_lat).equal(70);
+                    expect(end_long).equal(80);
+                    expect(rider_name).equal("Mark");
+                    expect(driver_name).equal("Nazar");
+                    expect(driver_vehicle).equal("Prius");
                     expect(created).to.not.null;
                     done();
                 })
@@ -289,15 +291,15 @@ describe('API tests', () => {
                     expect(response.body).to.be.an('object');
                     expect(response.body.totalRecords).equal(5);
                     expect(response.body.data).to.have.lengthOf(3);
-                    const {rideID, startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle, created} = response.body.data[0];
-                    expect(rideID).equal(3);
-                    expect(startLat).equal(50);
-                    expect(startLong).equal(60);
-                    expect(endLat).equal(70);
-                    expect(endLong).equal(80);
-                    expect(riderName).equal("Therry");
-                    expect(driverName).equal("Nazar");
-                    expect(driverVehicle).equal("Prius");
+                    const {ride_ID, start_lat, start_long, end_lat, end_long, rider_name, driver_name, driver_vehicle, created} = response.body.data[0];
+                    expect(ride_ID).equal(3);
+                    expect(start_lat).equal(50);
+                    expect(start_long).equal(60);
+                    expect(end_lat).equal(70);
+                    expect(end_long).equal(80);
+                    expect(rider_name).equal("Therry");
+                    expect(driver_name).equal("Nazar");
+                    expect(driver_vehicle).equal("Prius");
                     expect(created).to.not.null;
                     done();
                 })
