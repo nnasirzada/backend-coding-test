@@ -30,10 +30,16 @@ class RideController {
   async getAllRides(req: Request, res: Response) {
     try {
       let recordLimit = Number(req.query.limit) || 10;
-      const recordSkip = Number(req.query.skip) || 0;
-      if (recordLimit > 10) {
+      let recordSkip = Number(req.query.skip) || 0;
+
+      if (recordLimit > 10 || recordLimit < 1) {
         recordLimit = 10;
       }
+
+      if (recordSkip < 0) {
+        recordSkip = 0;
+      }
+
       const [rides, ridesCount] = await Promise.all([
         this.rideService.getAllRides(recordLimit, recordSkip),
         this.rideService.getRidesCount(),
