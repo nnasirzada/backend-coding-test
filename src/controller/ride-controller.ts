@@ -8,24 +8,6 @@ import ApiError from '../model/api-error';
 import Ride from '../model/ride';
 import RideService from '../service/ride-service';
 
-function handleError(error: any, res: Response) {
-  Logger.error(error);
-  let errorStatus = 500;
-  if (error.error_code) {
-    switch (error.error_code) {
-      case ApiError.RIDES_NOT_FOUND_ERROR:
-        errorStatus = 404;
-        break;
-      case ApiError.VALIDATION_ERROR:
-        errorStatus = 400;
-        break;
-      default:
-        errorStatus = 500;
-    }
-  }
-  return res.status(errorStatus).json(error);
-}
-
 @Service()
 @ApiPath({
   path: '/rides',
@@ -78,7 +60,7 @@ class RideController {
         data: rides,
       });
     } catch (error) {
-      return handleError(error, res);
+      return RideController.handleError(error, res);
     }
   }
 
@@ -106,7 +88,7 @@ class RideController {
       const ride = await this.rideService.getRideById(rideId);
       return res.json(ride);
     } catch (error) {
-      return handleError(error, res);
+      return RideController.handleError(error, res);
     }
   }
 
@@ -146,8 +128,26 @@ class RideController {
       const createdRide = await this.rideService.getRideById(createdRideId);
       return res.status(201).json(createdRide);
     } catch (error) {
-      return handleError(error, res);
+      return RideController.handleError(error, res);
     }
+  }
+
+  private static handleError(error: any, res: Response) {
+    Logger.error(error);
+    let errorStatus = 500;
+    if (error.error_code) {
+      switch (error.error_code) {
+        case ApiError.RIDES_NOT_FOUND_ERROR:
+          errorStatus = 404;
+          break;
+        case ApiError.VALIDATION_ERROR:
+          errorStatus = 400;
+          break;
+        default:
+          errorStatus = 500;
+      }
+    }
+    return res.status(errorStatus).json(error);
   }
 }
 

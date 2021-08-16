@@ -4,7 +4,7 @@ import { ApiModel, ApiModelProperty } from 'swagger-express-ts';
   description: 'Represents an error of API',
   name: 'API Error',
 })
-export default class ApiError {
+class ApiError extends Error {
   public static readonly VALIDATION_ERROR: string = 'VALIDATION_ERROR';
 
   public static readonly RIDES_NOT_FOUND_ERROR: string = 'RIDES_NOT_FOUND_ERROR';
@@ -27,7 +27,10 @@ export default class ApiError {
   error_message: string;
 
   constructor(error_code: string, error_message: string) {
+    super(error_message);
     this.error_code = error_code;
     this.error_message = error_message;
   }
 }
+
+export default ApiError;

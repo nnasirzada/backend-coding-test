@@ -4,11 +4,6 @@ import Ride from '../model/ride';
 import RideRepository from '../repository/ride-repository';
 import Logger from '../logger/logger';
 
-function handleError(error: Error | ApiError, reject: any) {
-  Logger.error(error);
-  return reject(new ApiError(ApiError.SERVER_ERROR, 'Unknown Error'));
-}
-
 @Service()
 class RideService {
   constructor(private readonly rideRepository: RideRepository) {}
@@ -23,7 +18,7 @@ class RideService {
           }
           return res(rides);
         })
-        .catch((error) => handleError(error, rej));
+        .catch((error) => RideService.handleError(error, rej));
     });
   }
 
@@ -37,7 +32,7 @@ class RideService {
           }
           return res(ride);
         })
-        .catch((error) => handleError(error, rej));
+        .catch((error) => RideService.handleError(error, rej));
     });
   }
 
@@ -74,7 +69,7 @@ class RideService {
       this.rideRepository
         .createRide(ride)
         .then((rideId) => res(rideId))
-        .catch((error) => handleError(error, rej));
+        .catch((error) => RideService.handleError(error, rej));
     });
   }
 
@@ -85,6 +80,11 @@ class RideService {
         .then((ridesCount) => res(ridesCount))
         .catch((error) => rej(error));
     });
+  }
+
+  private static handleError(error: Error | ApiError, reject: any) {
+    Logger.error(error);
+    return reject(new ApiError(ApiError.SERVER_ERROR, 'Unknown Error'));
   }
 }
 
